@@ -1,6 +1,7 @@
 class InicioPAM {
     desplegarReglamentoPAM(){
-        console.log("Reglamento");
+        const contenedor = document.getElementById("contenido");
+        contenedor.innerHTML = " <h1>Reglamento</h1>";
     }
 
     desplegarLineamientosClassroom(){
