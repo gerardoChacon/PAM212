@@ -8,12 +8,12 @@
     
 </head>
 <body>
-    <button onclick="desplegarReglamentoPAM()">Reglamento</button>
-    <button onclick="desplegarLineamientosClassroom()">Lineamientos</button>
-    <button onclick="desplegarFechasDeParciales()">Fechas Parciales</button>
-    <button onclick="desplegarPorcentajesPorParcial()">Porcentajes </button>
+    <button onclick="app.desplegarReglamentoPAM()">Reglamento</button>
+    <button onclick="app.desplegarLineamientosClassroom()">Lineamientos</button>
+    <button onclick="app.desplegarFechasDeParciales()">Fechas Parciales</button>
+    <button onclick="app.desplegarPorcentajesPorParcial()">Porcentajes </button>
 
-    <div id="contenido" class="hola"></div>
+    <div id="contenido"></div>
   
 <script src="app.js"></script>
 <!-- Instanciar la clase InicioPAM para poder modificar el DOM. Porque el método está declarado dentro de la clase en un ámbito local. Para utilizarlo en el ámbito global, tendríamos que declarar la función FUERA de la clase. -->
