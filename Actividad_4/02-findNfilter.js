@@ -1,6 +1,6 @@
 //Creación de un arreglo de objetos:
-
-let maestros = [
+//Exportar arreglo de objetos "maestros" para usar en otros archivos
+export let maestros = [
     {
         id: 1,
         nombre: "Ivan Isay Guerra Lopez",
@@ -23,13 +23,20 @@ let maestros = [
     }
 ];
 
-//find solo devuelve 1 solo resultado, es decir, si quiero buscar varios profesores que les den clases a un grupo específico solo me va a devolver el primer objeto que encuentre. Para buscar varios objetos hay que ussar filter.
+/* 
+find solo devuelve un solo resultado, es decir, si quiero buscar varios profesores
+que les den clases a un grupo específico solo me va a devolver el primer objeto
+que encuentre. Para buscar varios objetos hay que usar filter.
+ */
 
+let resultado = maestros.find((maestro, indice, array) => {
+    console.log("Estoy revisando: ", maestro.id, "en posición ", indice, "en el array", array );
+    return maestro.id == 1;
+});
 
-let resultado = maestros.find(maestro => maestro.grupos.includes(212));
-console.log("Maestros con find():");
+console.log("Maestros con find(): ");
 console.log(resultado);
 
-let resultadoDos = maestros.filter(maestro => maestro.grupos.includes(212));
+let resultadoDos = maestros.filter(maestro => maestro.grupos.includes(216));
 console.log("Maestros con filter():");
 console.log(resultadoDos);
