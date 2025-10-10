@@ -1,11 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View ,Button} from 'react-native';
+import React, {useState} from 'react';
+
 
 export default function App() {
+  const[contador, setContador] = useState(0);
+
   return (
     <View style={styles.container}>
-      <Text>Hola mundo React Native</Text>
-      <StatusBar style="auto" />
+      <Text>Contador: {contador}</Text>
+      <Button title="Incrementar" onPress={()=>setContador(contador+1)}></Button>
+      <Button title="decrementar" onPress={()=>setContador(contador-1)}></Button>
+      <Button title="reiniciar" onPress={()=>setContador(0)}></Button>
+      <StatusBar style="auto"/>
     </View>
   );
 }
