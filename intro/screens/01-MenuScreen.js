@@ -6,10 +6,12 @@ import BotonesScreen from './03-BotonesScreen';
 import TextImputScreen from './04-TextImputScreen';
 import ImageBackgroundScreen  from './05-ImageBackgroundScreen';
 import ScrollViewScreen from './06-ScrollViewScreen';
+import ScrollHorizontalViewScreen from './06-ScrollHorizontalViewScreen';
 import ActivityIndicatorScreen from './07-ActivityIndicatorScreen'
 import ListsScreen from './08-ListsScreen';
 import ModalScreen from './09-ModalScreen';
 import BottomSheetScreen from './10-BottomSheetScreen';
+import Repaso1Screen from './11-Repaso1Screen';
 
 
 
@@ -34,7 +36,12 @@ export default function MenuScreen() {
             return <ModalScreen/>
         case 'bottomSheet':
             return <BottomSheetScreen/>
+        case 'repaso1':
+            return <Repaso1Screen/>
+        case 'scrollHorizotnalView':
+            return <ScrollHorizontalViewScreen/>
         case 'menu':
+
             default:
                   return (
                         <View>
@@ -44,10 +51,12 @@ export default function MenuScreen() {
                             <Button onPress={()=>setScreen('textImput')} title='Pract: Text Imput'/>
                             <Button onPress={()=>setScreen('imageBackground')} title='Pract: Image Background'/>
                             <Button onPress={()=>setScreen('scrollView')} title='Pract: Scroll View'/>
+                            <Button onPress={()=>setScreen('scrollHorizotnalView')} title='Pract: Scroll Horizontal View'/>
                             <Button onPress={()=>setScreen('activityIndicator')} title='Pract: Activity Indicator'/>
                             <Button onPress={()=>setScreen('lists')} title='Pract: Lists'/>
                             <Button onPress={()=>setScreen('modal')} title='Pract: Modal'/>
                             <Button onPress={()=>setScreen('bottomSheet')} title='Pract: Bottom Sheet'/>
+                            <Button onPress={()=>setScreen('repaso1')} title='Repaso1'/>
                         </View>
                         )
     }
@@ -55,11 +64,4 @@ export default function MenuScreen() {
   
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#928e8eff',
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-});
+const styles = StyleSheet.create({});
