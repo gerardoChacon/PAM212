@@ -1,159 +1,131 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  View,
-  Text,
-  Animated,
-  StyleSheet,
-  Dimensions,
-  ImageBackground,
+  View, Text, StyleSheet, ImageBackground, TextInput, Button,
+  Alert, Switch, TouchableWithoutFeedback, Keyboard, Animated, Image, Platform, KeyboardAvoidingView
 } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
 
-SplashScreen.preventAutoHideAsync();
+export default function Repaso1Screen() {
+  // Hooks arriba
+  const [showForm, setShowForm] = useState(false);
+  const fade = useRef(new Animated.Value(0)).current;
+  const scale = useRef(new Animated.Value(0.9)).current;
 
-const { height } = Dimensions.get("window");
+  // Form
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [acepta, setAcepta] = useState(false);
 
-export default function SplashScreenPro() {
-  const [showMain, setShowMain] = useState(false);
-  const fadeLogo = useRef(new Animated.Value(0)).current;
-  const scaleLogo = useRef(new Animated.Value(0.5)).current;
-  const rotateLogo = useRef(new Animated.Value(0)).current;
-  const slideText = useRef(new Animated.Value(height / 2)).current;
-  const fadeOut = useRef(new Animated.Value(1)).current;
+  const correoOk = /^\S+@\S+\.\S+$/.test(correo);
+  const puedeEnviar = nombre.trim().length > 0 && correoOk && acepta;
+
+  const onRegister = () => {
+    if (!nombre.trim() || !correo.trim()) return Alert.alert("Error", "No dejes campos vacíos");
+    if (!correoOk) return Alert.alert("Error", "Correo inválido");
+    if (!acepta) return Alert.alert("Error", "Debes aceptar Términos y Condiciones");
+    Alert.alert("Registro", `Nombre: ${nombre}\nCorreo: ${correo}`);
+  };
 
   useEffect(() => {
     Animated.parallel([
-      Animated.timing(fadeLogo, {
-        toValue: 1,
-        duration: 1200,
-        useNativeDriver: false,
-      }),
-      Animated.spring(scaleLogo, {
-        toValue: 1,
-        friction: 5,
-        useNativeDriver: false,
-      }),
-      Animated.timing(rotateLogo, {
-        toValue: 1,
-        duration: 1200,
-        useNativeDriver: false,
-      }),
+      Animated.timing(fade, { toValue: 1, duration: 700, useNativeDriver: true }),
+      Animated.spring(scale, { toValue: 1, friction: 5, useNativeDriver: true }),
     ]).start();
-
-    Animated.timing(slideText, {
-      toValue: 0,
-      duration: 1000,
-      useNativeDriver: false,
-      delay: 800,
-    }).start();
-
-    const timer = setTimeout(async () => {
-      Animated.timing(fadeOut, {
-        toValue: 0,
-        duration: 800,
-        useNativeDriver: false,
-      }).start(async () => {
-        await SplashScreen.hideAsync(); 
-        setShowMain(true); 
-        
-      });
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setShowForm(true), 1400);
+    return () => clearTimeout(t);
   }, []);
 
-  const rotateInterpolate = rotateLogo.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "10deg"],
-  });
-
-  if (showMain) {
+  // Splash simple con tu logo
+  if (!showForm) {
     return (
-      <ImageBackground
-        source={require("../assets/Captura de pantalla 2025-09-09 173207.png")}
-        style={styles.background}
-        resizeMode="cover" 
-      >
-        <View style={styles.content}>
-          <Text style={styles.text}>¡Bienvenido!</Text>
-        </View>
-      </ImageBackground>
+      <View style={ss.splash}>
+        <Animated.Image
+          source={require("../assets/logo-manu.png")} // cambia si tu logo tiene otro nombre
+          style={[ss.splashImg, { opacity: fade, transform: [{ scale }] }]}
+          resizeMode="contain"
+        />
+      </View>
     );
   }
 
-
+  // Pantalla principal con fondo
   return (
-    <Animated.View style={[styles.container, { opacity: fadeOut }]}>
-      <Animated.Image
-        source={require("../assets/Captura de pantalla 2025-09-30 115213.png")}
-        resizeMode="contain"
-        style={[
-          styles.logoImage,
-          {
-            opacity: fadeLogo,
-            transform: [{ scale: scaleLogo }, { rotate: rotateInterpolate }],
-          },
-        ]}
-      />
-      <Animated.Text
-        style={[styles.text, { transform: [{ translateY: slideText }] }]}
-      >
-        ¡ImageBackground & Splash Screen!
-      </Animated.Text>
-      <Animated.View
-        style={[
-          styles.loader,
-          {
-            opacity: fadeLogo,
-            transform: [
-              {
-                translateX: slideText.interpolate({
-                  inputRange: [0, height / 2],
-                  outputRange: [0, -50],
-                }),
-              },
-            ],
-          },
-        ]}
-      />
-    </Animated.View>
+    <ImageBackground
+      source={require("../assets/backgroung-leclerc.png")}
+      style={s.bg}
+      resizeMode="cover"
+    >
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={s.card}>
+            <View style={s.header}>
+              <Image source={require("../assets/logo-manu.png")} style={s.logo} />
+              <Text style={s.title}>Registro de Usuario</Text>
+            </View>
+
+            <TextInput
+              style={s.inp}
+              placeholder="Nombre completo"
+              value={nombre}
+              onChangeText={setNombre}
+              autoCapitalize="words"
+              placeholderTextColor="#888"
+            />
+
+            <TextInput
+              style={s.inp}
+              placeholder="Correo electrónico"
+              value={correo}
+              onChangeText={(t) => setCorreo(t.toLowerCase())}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholderTextColor="#888"
+            />
+
+            <View style={s.row}>
+              <Switch value={acepta} onValueChange={setAcepta} />
+              <Text style={s.tyc}>Acepto Términos y Condiciones</Text>
+            </View>
+
+            <Button title="Registrarse" onPress={onRegister} disabled={!puedeEnviar} />
+
+            {/* pistas visibles básicas */}
+            {!nombre.trim() ? <Text style={s.hint}>· Falta nombre</Text> : null}
+            {correo.length > 0 && !correoOk ? <Text style={s.hint}>· Correo inválido</Text> : null}
+            {!acepta ? <Text style={s.hint}>· Acepta T&C</Text> : null}
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#007bffff",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loader: {
-    width: 60,
-    height: 6,
-    backgroundColor: "#fff",
-    borderRadius: 3,
-  },
-  logoImage: {
-    width: 300,
-    height: 300,
-    marginBottom: 5,
-  },
-  background: {
-    flex: 1,
-    width: "100%", 
-    height: "100%", 
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  content: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+const ss = StyleSheet.create({
+  splash: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#0a74da" },
+  splashImg: { width: 140, height: 140 },
+});
+
+const s = StyleSheet.create({
+  bg: { flex: 1 },
+  card: {
+    margin: 20,
+    marginTop: 40,
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.92)",
   },
-  text: {
-    color: "white",
-    fontSize: 24,
-    marginBottom: 10,
-    textAlign: "center",
+  header: { alignItems: "center", marginBottom: 8 },
+  logo: { width: 72, height: 72, resizeMode: "contain", marginBottom: 8 },
+  title: { fontSize: 20, fontWeight: "600", marginBottom: 8 },
+  inp: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
+    color: "#111",
   },
+  row: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 12 },
+  tyc: { flex: 1 },
+  hint: { marginTop: 6, color: "#555" },
 });
